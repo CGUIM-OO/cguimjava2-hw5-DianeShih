@@ -71,13 +71,18 @@ public class Table {
 		dealercard.add( allcards.getOneCard(true));
 		onedealer.setOneRoundCard(dealercard);
 		//印出莊家開著的那張牌
+		 System.out.println("Dealer's face up card is");
 		 get_face_up_card_of_dealer().printCard();
 	}
 	private void ask_each_player_about_hits()
 	{
 		//玩家是否要牌
 		for(int i=0;i<=3;i++)
-		{boolean hit=false;
+		{
+			System.out.println(allplayer[i].getName()+"'s Cards now:");
+			for(Card c : allplayer[i].getOneRoundCard()){
+				c.printCard();}
+			boolean hit;
 		do{
 			hit=allplayer[i].hit_me(this); //this
 			if(hit){
@@ -121,37 +126,56 @@ public class Table {
 	}
 	private void calculate_chips()
 	//玩家贏印出",Get "+下注籌碼數+" Chips, the Chips now is: "+玩家最新籌碼數(提示: get_current_chips())
+	
 	{for(int i=0;i<=3;i++)
+		{System.out.println(allplayer[i].getName()+"Cards:");
+		allplayer[i].printAllCard();
 	{
 		if(allplayer[i].getTotalValue()>21 && onedealer.getTotalValue()>21)
 		{
-			System.out.println("Need another game");
+			System.out.println(allplayer[i].getName()+"card value is"+allplayer[i].getTotalValue()+"chips have no change! The Chips now is:"+allplayer[i].getCurrentChips());
+			
+			
 		}else if(allplayer[i].getTotalValue()<=21&&onedealer.getTotalValue()>21){//玩家贏了
 			allplayer[i].increaseChips(pos_betArray[i]);
-			System.out.print(allplayer[i].getName()+" wins the game"+",Get");
+			
+		
 			System.out.print((pos_betArray[i])+" Chips, the Chips now is:"+allplayer[i].getCurrentChips());
+			
 	
 		}else if(allplayer[i].getTotalValue()>21&&onedealer.getTotalValue()<=21){//莊家贏了
-			allplayer[i].increaseChips(pos_betArray[i]);
-			System.out.println(allplayer[i].getName()+" loss the game");
+			allplayer[i].increaseChips(-pos_betArray[i]);
+			          
 			System.out.print((pos_betArray[i])+" Chips, the Chips now is:"+allplayer[i].getCurrentChips());
 			
 		}else if(allplayer[i].getTotalValue()>onedealer.getTotalValue()&&allplayer[i].getTotalValue()<=21){//玩家贏了
 			allplayer[i].increaseChips(pos_betArray[i]);
-			System.out.print(allplayer[i].getName()+" wins the game"+",Get");
+			
 			System.out.print((pos_betArray[i])+" Chips, the Chips now is:"+allplayer[i].getCurrentChips());
 			
 		}else if(allplayer[i].getTotalValue()<onedealer.getTotalValue()&&onedealer.getTotalValue()<=21){//莊家贏了
 			allplayer[i].increaseChips(pos_betArray[i]);
-			System.out.println(allplayer[i].getName()+" loss the game");
+			
 			System.out.print((pos_betArray[i])+" Chips, the Chips now is:"+allplayer[i].getCurrentChips());
+		}else if(allplayer[i].getTotalValue()==21&&onedealer.getTotalValue()<=21)
+		{
+			if(allplayer[i].getOneRoundCard().size()==2&&allplayer[i].hasAce())
+				allplayer[i].increaseChips(pos_betArray[i]*2);
 			
-		}else{
+			System.out.print((pos_betArray[i])+" Chips, the Chips now is:"+allplayer[i].getCurrentChips());
+		}
+		else 
+		
 			
-			System.out.println("chips have no change! The Chips now is:"+allplayer[i].getCurrentChips());//平手
+			System.out.println(allplayer[i].getName()+"card value is"+allplayer[i].getTotalValue()+"chips have no change! The Chips now is:"+allplayer[i].getCurrentChips());//平手
+		
+	}
 		}
 	}
-	}
+	
+
+
+	
 	public int[] get_players_bet()
 	{
 		return pos_betArray;
